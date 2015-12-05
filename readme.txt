@@ -4,8 +4,7 @@ Copyright © Nusantara Project
 Introduction
 ------------
 
-SimplePhonebook is a simple phonebook application made with C language. SimplePhonebook
-have command line interface. 
+SimplePhonebook is a simple phonebook console application made with C language.
 
 
 Features

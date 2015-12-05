@@ -1,10 +1,10 @@
 /*
-SimplePhonebook - SimplePhonebook made with C language.
+	SimplePhonebook - Simple phonebook console made with C language.
 
-Copyright (c) Nusantara Project. All rights reserved.
+	(c) 2015 Nusantara Project.
 */
 
-#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS //Error	C4996	'scanf': This function or variable may be unsafe.Consider using scanf_s instead.To disable deprecation, use _CRT_SECURE_NO_WARNINGS.See online help for details.SimplePhonebook	e : \binus\kuliah\semester 1\alghoritm and programming\assigment\project\simplephonebook\simplephonebook\main.cpp
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -58,8 +58,6 @@ int main()
 		}
 	} while (menu != 5);
 
-	puts("");
-	//system("pause");
 	return 0;
 }
 
@@ -166,7 +164,7 @@ int deleteContact()
 	return 0;
 }
 
-/* store contact from %Structure_Variables into Contact.txt*/
+/* Store contact from %Structure_Variables into Contact.txt*/
 int storeContact()
 {
 
@@ -177,6 +175,6 @@ int storeContact()
 /*
 reference:
 
-1. fflush(stdin) issue in Microsoft Visual Studio 2015 @ http://stackoverflow.com/a/33216224
+- fflush(stdin) issue in Microsoft Visual Studio 2015 @ http://stackoverflow.com/a/33216224
 
 */
