@@ -11,55 +11,59 @@ Copyright (c) Nusantara Project. All rights reserved.
 #include<string.h>
 #include<ctype.h>
 
-
+/* Function prototyping */
 int newContact();
 int listContact();
 int searchContact();
 int deleteContact();
+int storeContact();
 
-char bilas;
+char bilas; // fflush variable
 
 int main()
 {
 	int menu;
 
-	printf("Phone Book\n");
-	printf("==========\n");
-	printf("1. Add New Contact\n");
-	printf("2. View List Contact\n");
-	printf("3. Search Contact\n");
-	printf("4. Delete Contact\n");
-	printf("5. Exit\n");
-	printf("Choose menu: ");
-	scanf("%d", &menu);
-	scanf("%c", &bilas); //fflush(stdin);
-
-	switch (menu) {
-	case 1:
-		newContact();
-		break;
-	case 2:
-		listContact();
-		break;
-	case 3:
-		searchContact();
-		break;
-	case 4:
-		deleteContact();
-		break;
-	case 5:
-		//return 0;
-		break;
-	}
-
+	/* Menu selection */
+	do
+	{
+		system("cls");
+		printf("Phone Book\n");
+		printf("==========\n");
+		printf("1. Add New Contact\n");
+		printf("2. View List Contact\n");
+		printf("3. Search Contact\n");
+		printf("4. Delete Contact\n");
+		printf("5. Exit\n");
+		printf("Choose menu: ");
+		scanf("%d", &menu);
+		scanf("%c", &bilas); //fflush(stdin);
+	
+		switch (menu) {
+		case 1:
+			newContact();
+			break;
+		case 2:
+			listContact();
+			break;
+		case 3:
+			searchContact();
+			break;
+		case 4:
+			deleteContact();
+			break;
+		case 5:
+			storeContact();
+			break;
+		}
+	} while (menu != 5);
 
 	puts("");
-	system("pause");
+	//system("pause");
 	return 0;
 }
 
-
-
+/* Add new contact to %Structure_Variables */
 int newContact()
 {
 	char name[64],
@@ -121,19 +125,49 @@ int newContact()
 	return 0;
 }
 
+/* List contact from %Structure_Variables */
 int listContact()
 {
+	int i;
 
+	system("cls");
+	printf("View List Contact\n");
+	puts("");
+
+	puts("");
+	system("pause");
 	return 0;
 }
 
+/* Search contact from %Structure_Variables */
 int searchContact()
 {
+	int i,
+		found = 0;
 
+	system("cls");
+	printf("Search Contact\n");
+	printf("Input name [1..30 char]: ");
+
+	printf("Total %d contact<s> found.\n", found);
+	system("pause");
 	return 0;
 }
 
+/* Delete contact from %Structure_Variables */
 int deleteContact()
+{
+
+	system("cls");
+	printf("Delete Contact\n");
+
+	printf("Success deleted one contact.\n");
+	system("pause");
+	return 0;
+}
+
+/* store contact from %Structure_Variables into Contact.txt*/
+int storeContact()
 {
 
 	return 0;
@@ -143,6 +177,6 @@ int deleteContact()
 /*
 reference:
 
-1. fflush(stdin) issue @ http://stackoverflow.com/a/33216224
+1. fflush(stdin) issue in Microsoft Visual Studio 2015 @ http://stackoverflow.com/a/33216224
 
 */
