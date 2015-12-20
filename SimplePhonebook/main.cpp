@@ -14,7 +14,7 @@
 char bilas; // fflush variable
 
 /* phoneBook structure */
-struct phoneBook {
+struct phoneBook {	
 	int index;
 	char name[64],
 		phoneNumber[64];
@@ -26,7 +26,7 @@ int newContact(int, struct phoneBook*);
 int listContact(int, struct phoneBook*);
 int searchContact(int, struct phoneBook*);
 int deleteContact(int, struct phoneBook*);
-int sortContact(int, struct phoneBook*);
+int sortContact(const void *, const void *);
 int storeContact(int, struct phoneBook*);
 
 int main()
@@ -35,7 +35,6 @@ int main()
 		counter = 0; // contact counter
 	struct phoneBook contact[200]; // The old nokia phone model. If you know what I mean. haha
 	
-
 	/* Menu selection */
 	do
 	{
@@ -55,7 +54,7 @@ int main()
 		case 1:
 			newContact(counter, contact);
 			counter++;
-			sortContact(counter, contact);
+			qsort(contact, 200, sizeof(struct phoneBook), sortContact);	// Sort contact struct by name
 			break;
 		case 2:
 			listContact(counter, contact);
@@ -65,7 +64,7 @@ int main()
 			break;
 		case 4:
 			deleteContact(counter, contact);
-			sortContact(counter, contact);
+			qsort(contact, 200, sizeof(struct phoneBook), sortContact);	// Sort contact struct by name
 			counter--;
 			break;
 		case 5:
@@ -138,33 +137,41 @@ int newContact(int counter, struct phoneBook *contact)
 
 	puts("");
 	printf("New contact successfully added!\n");
-	printf("%s\n%s\n", contact[counter].name, contact[counter].phoneNumber);
 
 	system("pause");
 	return 0;
 }
 
 /* List contact from %Structure_Variables */
-int listContact(int, struct phoneBook*)
+int listContact(int counter, struct phoneBook* contact)
 {
 
-	/* ASCII table
-	65	A
-	90	Z
-	97	a
-	122	z
-	*/
-
-	int i;
-
+	int i,
+		prefix = 0;
+	char incasePrefix;
 
 	system("cls");
 	printf("View List Contact\n");
 	puts("");
 
 	printf("%s %3s %-30s %12s\n", "", "#", "Name", "Phone Number"); // header
-
-	printf("%s %3s %-30s %12s\n", "", "#", "Name", "Phone Number"); // body
+	for (i = 0; i < counter; i++)
+	{
+		//printf("%s %3d %-30s %12s\n", "", i + 1, contact[i].name, contact[i].phoneNumber); // body
+		incasePrefix = contact[i].name[0];
+		incasePrefix = toupper(incasePrefix);
+		if (incasePrefix == prefix)
+		{
+			printf("%c", 32); // body
+		}
+		else
+		{
+			prefix = incasePrefix;
+			printf("%c", prefix); // body
+		}
+		//printf("%c", prefix ); // body
+		printf(" %3d %-30s %12s\n", i + 1, contact[i].name, contact[i].phoneNumber);
+	}
 
 	puts("");
 	system("pause");
@@ -200,32 +207,14 @@ int deleteContact(int, struct phoneBook*)
 	return 0;
 }
 
-/* Reconstruct contact to %Structure_Variables */
-int sortContact(int counter, struct phoneBook *contact)
+/* Reconstruct contact to %Structure_Variables with qsort */
+int sortContact(const void *contact1, const void *contact2)
 {
 
-	/* ASCII table
-	65	A
-	90	Z
-	97	a
-	122	z
-	*/
-	int i;
-	struct phoneBook contactBackup[200]; // recountruction
-
-	// backup contact data
-	for (i = 0; i < counter; i++)
-	{
-		contactBackup[i] = contact[i];
-	}
+	struct phoneBook *ptr_contact1 = (struct phoneBook *)contact1;
+	struct phoneBook *ptr_contact2 = (struct phoneBook *)contact2;
 	
-
-	for (i = 0; i < counter; i++)
-	{
-
-	}
-
-	return 0;
+	return strcmp(ptr_contact1->name, ptr_contact2->name);
 }
 
 /* Store contact from %Structure_Variables into Contact.txt*/
