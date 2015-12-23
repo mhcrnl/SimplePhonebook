@@ -22,7 +22,6 @@ struct phoneBook {
 };
 
 
-
 /* Function prototyping */
 int newContact(int, struct phoneBook*);
 int listContact(int, struct phoneBook*);
@@ -37,7 +36,7 @@ int main()
 		counter = 0; // contact counter
 	struct phoneBook contact[200]; // As my old nokia phone model. If you know what I mean. haha
 
-	/* Dummy data */
+	/* Dummy data 
 	int aiueo;	counter = 100; // dummy
 	char dummyName[100][64] = { "Brazil", "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos Islands", "Colombia", "Comoros", "Congo", "Congo", "Cook Islands", "Costa Rica", "Cote d'Ivoire", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands", "Faroe Islands", "Fiji", "Finland", "France", "France Metropolitan", "French Guiana", "French Polynesia", "French Southern Territories", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Heard and Mc Donald Islands", "Vatican City State", "Honduras", "Hong Kong", "Hungary", "Iceland", "Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegowina", "Botswana", "Bouvet Island"};
 	char dummyPhone[100][64] = {"7520194502", "9730185562", "3692011098", "0194321010", "8504397647", "1024419745", "7823212192", "2073718872", "9082108458", "2494921192", "9730185562", "3692011098", "0194321010", "8504397647", "1024419745", "7823212192", "2073718872", "9082108458", "2494921192" , "9730185562", "3692011098", "0194321010", "8504397647", "1024419745", "7823212192", "2073718872", "9082108458", "2494921192" , "9730185562", "3692011098", "0194321010", "8504397647", "1024419745", "7823212192", "2073718872", "9082108458", "2494921192" , "9730185562", "3692011098", "0194321010", "8504397647", "1024419745", "7823212192", "2073718872", "9082108458", "2494921192" , "9730185562", "3692011098", "0194321010", "8504397647", "1024419745", "7823212192", "2073718872", "9082108458", "2494921192" , "9730185562", "3692011098", "0194321010", "8504397647", "1024419745", "7823212192", "2073718872", "9082108458", "2494921192" , "9730185562", "3692011098", "0194321010", "8504397647", "1024419745", "7823212192", "2073718872", "9082108458", "2494921192" , "9730185562", "3692011098", "0194321010", "8504397647", "1024419745", "7823212192", "2073718872", "9082108458", "2494921192" , "9730185562", "3692011098", "0194321010", "8504397647", "1024419745", "7823212192", "2073718872", "9082108458", "2494921192" , "9730185562", "3692011098", "0194321010", "8504397647", "1024419745", "7823212192", "2073718872", "9082108458", "2494921192" };
@@ -46,8 +45,7 @@ int main()
 		strcpy(contact[aiueo].name, dummyName[aiueo]);		strcpy(contact[aiueo].phoneNumber, dummyPhone[aiueo]);
 	}
 	qsort(contact, counter, sizeof(struct phoneBook), sortContact);	// Sort contact struct by name
-	//printf("%d \t%s \t%s\n", 111, contact[110].name, contact[110].phoneNumber);
-	/* end of Dummy data */
+	 end of Dummy data */
 
 	/* Menu selection */
 	do
@@ -90,7 +88,7 @@ int main()
 	return 0;
 }
 
-/* Add new contact to %Structure_Variables */
+/* Add new contact to contact structure */
 int newContact(int counter, struct phoneBook *contact)
 {
 	char name[64],
@@ -154,7 +152,7 @@ int newContact(int counter, struct phoneBook *contact)
 	return 0;
 }
 
-/* List contact from %Structure_Variables */
+/* List contact from contact structure */
 int listContact(int counter, struct phoneBook* contact)
 {
 
@@ -190,7 +188,7 @@ int listContact(int counter, struct phoneBook* contact)
 	return 0;
 }
 
-/* Search contact from %Structure_Variables */
+/* Search contact from contact structure */
 int searchContact(int counter, struct phoneBook* contact)
 {
 	int i,
@@ -237,7 +235,7 @@ int searchContact(int counter, struct phoneBook* contact)
 	return 0;
 }
 
-/* Delete contact from %Structure_Variables */
+/* Delete contact from contact structure */
 int deleteContact(int counter, struct phoneBook* contact)
 {
 
@@ -291,7 +289,7 @@ int deleteContact(int counter, struct phoneBook* contact)
 	return 0;
 }
 
-/* Reconstruct contact to %Structure_Variables with qsort */
+/* Reconstruct contact to contact structure with qsort */
 int sortContact(const void *contact1, const void *contact2)
 {
 
@@ -303,15 +301,19 @@ int sortContact(const void *contact1, const void *contact2)
 	return _strcmpi(ptr_contact1->name, ptr_contact2->name); // case insensitive
 }
 
-/* Store contact from %Structure_Variables into Contact.txt*/
-int storeContact(int, struct phoneBook*)
+/* Store contact from contact structure into Contact.txt*/
+int storeContact(int counter, struct phoneBook* contact)
 {
+	int i;
+	FILE *fp;
+	fp = fopen("Contact.txt", "w"); //http://www.cplusplus.com/reference/cstdio/fopen/
 
+	for (i = 0; i < counter; i++)
+	{
+		fprintf(fp, "%s;%s\n", contact[i].name, contact[i].phoneNumber);
+	}
 
-
-
-
-
+	fclose(fp);
 
 	return 0;
 }
