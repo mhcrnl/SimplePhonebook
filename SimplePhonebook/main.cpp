@@ -1,12 +1,12 @@
 /*
-	GSLC Assigment phone book with C language.
+GSLC Assigment phone book with C language.
 
-	Group:
-		Joshua Gugun Siagian	1901496303
-		Ishak Charles			1901528734
-		Haryadi Irawan			1901528665
+Group:
+Joshua Gugun Siagian	1901496303
+Ishak Charles			1901528734
+Haryadi Irawan			1901528665
 
-	repository @ https://github.com/suabahasa/SimplePhonebook
+repository @ https://github.com/suabahasa/SimplePhonebook
 */
 
 #define _CRT_SECURE_NO_WARNINGS //Error	C4996	'scanf': This function or variable may be unsafe.Consider using scanf_s instead.To disable deprecation, use _CRT_SECURE_NO_WARNINGS.See online help for details.
@@ -15,8 +15,6 @@
 #include<stdlib.h>
 #include<string.h>
 #include<ctype.h>
-
-char bilas; // fflush variable
 
 /* phoneBook structure */
 struct phoneBook {
@@ -56,7 +54,7 @@ int main()
 		printf("5. Exit\n");
 		printf("Choose menu: ");
 		scanf("%d", &menu);
-		scanf("%c", &bilas); //fflush(stdin); // comment if running on machine
+		fflush(stdin); // comment if running on machine
 
 		switch (menu) {
 		case 1:
@@ -86,7 +84,7 @@ int main()
 	return 0;
 }
 
-/* Add new contact to contact structure */
+/* Read contact from Contact.txt file */
 int readContact(struct phoneBook *contact)
 {
 	int counter = 0;
@@ -97,7 +95,7 @@ int readContact(struct phoneBook *contact)
 
 	if (fp != NULL)
 	{
-		fseek(fp, 0, SEEK_END);
+		fseek(fp, 0, SEEK_END); //Reposition stream position indicator
 		size = ftell(fp); // get size of the file
 
 		if (size == 0)
@@ -107,9 +105,10 @@ int readContact(struct phoneBook *contact)
 		}
 		else
 		{
+			fseek(fp, 0, SEEK_SET);//Reposition stream position indicator
 			while (!feof(fp))
 			{
-				fscanf(fp, "%[^;];%s\n", &contact[counter].name, &contact[counter].phoneNumber); 
+				fscanf(fp, "%[^;];%s\n", &contact[counter].name, &contact[counter].phoneNumber);
 				counter++;
 			}
 			fclose(fp);
@@ -135,7 +134,7 @@ int newContact(int counter, struct phoneBook *contact)
 		validate = 0;
 		printf("Input name [1..30 char]: ");
 		scanf("%[^\n]", name);
-		scanf("%c", &bilas); //fflush(stdin); // comment if running on machine
+		fflush(stdin); // comment if running on machine
 
 		if (strlen(name) > 30)
 		{
@@ -154,7 +153,7 @@ int newContact(int counter, struct phoneBook *contact)
 		validate = 0;
 		printf("Input phone number [6..12 digits]: ");
 		scanf("%[^\n]", phoneNumber);
-		scanf("%c", &bilas); //fflush(stdin); // comment if running on machine
+		fflush(stdin); // comment if running on machine
 
 		if (strlen(phoneNumber) < 6 || strlen(phoneNumber) > 12)
 		{
@@ -232,7 +231,7 @@ int searchContact(int counter, struct phoneBook* contact)
 	printf("Search Contact\n");
 	printf("Input name [1..30 char]: ");
 	scanf("%[^\n]", iName);
-	scanf("%c", &bilas); //fflush(stdin); // comment if running on machine
+	fflush(stdin); // comment if running on machine
 	puts("");
 
 	for (j = 0; j < strlen(iName); j++)
@@ -298,12 +297,12 @@ int deleteContact(int counter, struct phoneBook* contact)
 	}
 
 	puts("");
-	if(counter > 0){
+	if (counter > 0) {
 		do {
 			validate = 0;
 			printf("Input #number of contact that you want to delete[1..%d]: ", counter);
 			scanf("%d", &selected);
-			scanf("%c", &bilas); //fflush(stdin); // comment if running on machine
+			fflush(stdin); // comment if running on machine
 
 			if (selected > counter || selected < 1)
 			{
@@ -320,7 +319,7 @@ int deleteContact(int counter, struct phoneBook* contact)
 	{
 		printf("There is no data to be deleted.\n");
 	}
-	
+
 	system("pause");
 	return 0;
 }
@@ -359,7 +358,7 @@ note:
 
 - fflush(stdin) issue in Microsoft Visual Studio 2015 @ http://stackoverflow.com/a/33216224
 - Debug Assertion Failed @ http://bit.ly/1IwaBMC
-	Debug Assertion Failed!; File: minkernel\crts\ucrt\src\appcrt\convert\isctyple.cpp; Line: 36; Expression: c >= -1 && c <=255
+Debug Assertion Failed!; File: minkernel\crts\ucrt\src\appcrt\convert\isctyple.cpp; Line: 36; Expression: c >= -1 && c <=255
 - when blank input in scanf
 - strcmpi(); C4996 @ https://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k%28C4996%29&rd=true
 
