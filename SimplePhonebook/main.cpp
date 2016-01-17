@@ -56,7 +56,7 @@ int main()
 		printf("5. Exit\n");
 		printf("Choose menu: ");
 		scanf("%d", &menu);
-		scanf("%c", &bilas); //fflush(stdin); // uncomment if running on machine
+		scanf("%c", &bilas); //fflush(stdin); // comment if running on machine
 
 		switch (menu) {
 		case 1:
@@ -72,8 +72,10 @@ int main()
 			break;
 		case 4:
 			deleteContact(counter, contact);
-			qsort(contact, counter, sizeof(struct phoneBook), sortContact);	// Sort contact struct by name
-			counter--;
+			if (counter > 0) {
+				qsort(contact, counter, sizeof(struct phoneBook), sortContact);	// Sort contact struct by name
+				counter--;
+			}
 			break;
 		case 5:
 			storeContact(counter, contact);
@@ -88,19 +90,31 @@ int main()
 int readContact(struct phoneBook *contact)
 {
 	int counter = 0;
+	long size;
 
 	FILE *fp;
 	fp = fopen("Contact.txt", "r");
 
 	if (fp != NULL)
 	{
-		while (!feof(fp))
+		fseek(fp, 0, SEEK_END);
+		size = ftell(fp); // get size of the file
+
+		if (size == 0)
 		{
-			fscanf(fp, "%[^;];%s\n", &contact[counter].name, &contact[counter].phoneNumber); // CSV (<semicolon>Comma Separated Values)
-			counter++;
+			fclose(fp);
+			return counter;
 		}
-		fclose(fp);
-		return counter;
+		else
+		{
+			while (!feof(fp))
+			{
+				fscanf(fp, "%[^;];%s\n", &contact[counter].name, &contact[counter].phoneNumber); 
+				counter++;
+			}
+			fclose(fp);
+			return counter;
+		}
 	}
 
 	return 0;
@@ -121,7 +135,7 @@ int newContact(int counter, struct phoneBook *contact)
 		validate = 0;
 		printf("Input name [1..30 char]: ");
 		scanf("%[^\n]", name);
-		scanf("%c", &bilas); //fflush(stdin); // uncomment if running on machine
+		scanf("%c", &bilas); //fflush(stdin); // comment if running on machine
 
 		if (strlen(name) > 30)
 		{
@@ -129,7 +143,7 @@ int newContact(int counter, struct phoneBook *contact)
 			validate += 1;
 		}
 
-		if ((name[0] < -1 || name[0] > 255) || isalpha(name[0]) == 0) //Debug Assertion Failed
+		if ((name[0] < -1 || name[0] > 255) || isalpha(name[0]) == 0)
 		{
 			printf("\tFirst letter of name should be an alphabet\n");
 			validate += 1;
@@ -140,7 +154,7 @@ int newContact(int counter, struct phoneBook *contact)
 		validate = 0;
 		printf("Input phone number [6..12 digits]: ");
 		scanf("%[^\n]", phoneNumber);
-		scanf("%c", &bilas); //fflush(stdin); // uncomment if running on machine
+		scanf("%c", &bilas); //fflush(stdin); // comment if running on machine
 
 		if (strlen(phoneNumber) < 6 || strlen(phoneNumber) > 12)
 		{
@@ -150,7 +164,7 @@ int newContact(int counter, struct phoneBook *contact)
 
 		for (i = 0; i < strlen(phoneNumber); i++)
 		{
-			if ((phoneNumber[0] < -1 || phoneNumber[0] > 255) || isalpha(phoneNumber[i]) != 0) //Debug Assertion Failed
+			if ((phoneNumber[0] < -1 || phoneNumber[0] > 255) || isalpha(phoneNumber[i]) != 0)
 			{
 				printf("\tPhone numbers should only contain digits 0-9\n");
 				validate += 1;
@@ -218,7 +232,7 @@ int searchContact(int counter, struct phoneBook* contact)
 	printf("Search Contact\n");
 	printf("Input name [1..30 char]: ");
 	scanf("%[^\n]", iName);
-	scanf("%c", &bilas); //fflush(stdin); // uncomment if running on machine
+	scanf("%c", &bilas); //fflush(stdin); // comment if running on machine
 	puts("");
 
 	for (j = 0; j < strlen(iName); j++)
@@ -261,7 +275,7 @@ int deleteContact(int counter, struct phoneBook* contact)
 	char incasePrefix;
 
 	system("cls");
-	printf("Delete Contact\n"); // printf("View List Contact\n");
+	printf("Delete Contact\n");
 	puts("");
 
 	printf("%c %3s %-30s %12s\n", 32, "#", "Name", "Phone Number"); // table header
@@ -284,28 +298,34 @@ int deleteContact(int counter, struct phoneBook* contact)
 	}
 
 	puts("");
-	do {
-		validate = 0;
-		printf("Input #number of contact that you want to delete[1..%d]: ", counter);
-		scanf("%d", &selected);
-		scanf("%c", &bilas); //fflush(stdin); // uncomment if running on machine
+	if(counter > 0){
+		do {
+			validate = 0;
+			printf("Input #number of contact that you want to delete[1..%d]: ", counter);
+			scanf("%d", &selected);
+			scanf("%c", &bilas); //fflush(stdin); // comment if running on machine
 
-		if (selected > counter || selected < 1)
-		{
-			printf("\t#number of contact should only between 1-%d\n", counter);
-			validate += 1;
-		}
+			if (selected > counter || selected < 1)
+			{
+				printf("\t#number of contact should only between 1-%d\n", counter);
+				validate += 1;
+			}
 
-	} while (validate != 0);
+		} while (validate != 0);
 
-	memset(&contact[selected - 1], sizeof(contact[selected - 1]), sizeof(contact[selected - 1]));
-
-	printf("Success deleted one contact.\n");
+		memset(&contact[selected - 1], sizeof(contact[selected - 1]), sizeof(contact[selected - 1]));
+		printf("Success deleted one contact.\n");
+	}
+	else
+	{
+		printf("There is no data to be deleted.\n");
+	}
+	
 	system("pause");
 	return 0;
 }
 
-/* Reconstruct contact structure with qsort */
+/* Reconstruct contact structure with Quicksort */
 int sortContact(const void *contact1, const void *contact2)
 {
 	struct phoneBook *ptr_contact1 = (struct phoneBook *)contact1;
@@ -324,7 +344,7 @@ int storeContact(int counter, struct phoneBook* contact)
 
 	for (i = 0; i < counter; i++)
 	{
-		fprintf(fp, "%s;%s\n", contact[i].name, contact[i].phoneNumber); // CSV (<semi>Comma Separated Values)
+		fprintf(fp, "%s;%s\n", contact[i].name, contact[i].phoneNumber);
 	}
 
 	fclose(fp);
@@ -335,14 +355,12 @@ int storeContact(int counter, struct phoneBook* contact)
 
 /*
 
-known problem and unresolved:
+note:
 
 - fflush(stdin) issue in Microsoft Visual Studio 2015 @ http://stackoverflow.com/a/33216224
 - Debug Assertion Failed @ http://bit.ly/1IwaBMC
 	Debug Assertion Failed!; File: minkernel\crts\ucrt\src\appcrt\convert\isctyple.cpp; Line: 36; Expression: c >= -1 && c <=255
-	when blank input in
-	scanf("%[^\n]", name);
-	scanf("%[^\n]", phoneNumber);
+- when blank input in scanf
 - strcmpi(); C4996 @ https://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k%28C4996%29&rd=true
 
 */
