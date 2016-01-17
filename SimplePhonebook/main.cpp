@@ -16,7 +16,9 @@ repository @ https://github.com/suabahasa/SimplePhonebook
 #include<string.h>
 #include<ctype.h>
 
-/* phoneBook structure */
+char bilas; // fflush variable
+
+			/* phoneBook structure */
 struct phoneBook {
 	char name[64],
 		phoneNumber[64];
@@ -54,7 +56,7 @@ int main()
 		printf("5. Exit\n");
 		printf("Choose menu: ");
 		scanf("%d", &menu);
-		fflush(stdin); // comment if running on machine
+		scanf("%c", &bilas); //fflush(stdin); // comment if running on machine
 
 		switch (menu) {
 		case 1:
@@ -95,7 +97,7 @@ int readContact(struct phoneBook *contact)
 
 	if (fp != NULL)
 	{
-		fseek(fp, 0, SEEK_END); //Reposition stream position indicator
+		fseek(fp, 0, SEEK_END);//Reposition stream position indicator
 		size = ftell(fp); // get size of the file
 
 		if (size == 0)
@@ -134,7 +136,7 @@ int newContact(int counter, struct phoneBook *contact)
 		validate = 0;
 		printf("Input name [1..30 char]: ");
 		scanf("%[^\n]", name);
-		fflush(stdin); // comment if running on machine
+		scanf("%c", &bilas); //fflush(stdin); // comment if running on machine
 
 		if (strlen(name) > 30)
 		{
@@ -153,7 +155,7 @@ int newContact(int counter, struct phoneBook *contact)
 		validate = 0;
 		printf("Input phone number [6..12 digits]: ");
 		scanf("%[^\n]", phoneNumber);
-		fflush(stdin); // comment if running on machine
+		scanf("%c", &bilas); //fflush(stdin); // comment if running on machine
 
 		if (strlen(phoneNumber) < 6 || strlen(phoneNumber) > 12)
 		{
@@ -231,7 +233,7 @@ int searchContact(int counter, struct phoneBook* contact)
 	printf("Search Contact\n");
 	printf("Input name [1..30 char]: ");
 	scanf("%[^\n]", iName);
-	fflush(stdin); // comment if running on machine
+	scanf("%c", &bilas); //fflush(stdin); // comment if running on machine
 	puts("");
 
 	for (j = 0; j < strlen(iName); j++)
@@ -302,7 +304,7 @@ int deleteContact(int counter, struct phoneBook* contact)
 			validate = 0;
 			printf("Input #number of contact that you want to delete[1..%d]: ", counter);
 			scanf("%d", &selected);
-			fflush(stdin); // comment if running on machine
+			scanf("%c", &bilas); //fflush(stdin); // comment if running on machine
 
 			if (selected > counter || selected < 1)
 			{
