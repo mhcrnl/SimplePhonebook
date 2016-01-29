@@ -16,9 +16,7 @@ repository @ https://github.com/suabahasa/SimplePhonebook
 #include<string.h>
 #include<ctype.h>
 
-char bilas; // fflush variable
-
-			/* phoneBook structure */
+/* phoneBook structure */
 struct phoneBook {
 	char name[64],
 		phoneNumber[64];
@@ -30,6 +28,7 @@ int newContact(int, struct phoneBook*);
 int listContact(int, struct phoneBook*);
 int searchContact(int, struct phoneBook*);
 int deleteContact(int, struct phoneBook*);
+int sortir(int, struct phoneBook*);
 int sortContact(const void *, const void *);
 int storeContact(int, struct phoneBook*);
 int readContact(struct phoneBook*);
@@ -56,13 +55,14 @@ int main()
 		printf("5. Exit\n");
 		printf("Choose menu: ");
 		scanf("%d", &menu);
-		scanf("%c", &bilas); //fflush(stdin); // comment if running on machine
+		fflush(stdin); // comment if running on machine
 
 		switch (menu) {
 		case 1:
 			newContact(counter, contact);
 			counter++;
-			qsort(contact, counter, sizeof(struct phoneBook), sortContact);	// Sort contact struct by name
+			//qsort(contact, counter, sizeof(struct phoneBook), sortContact);	// Sort contact struct by name
+			sortir(counter, contact);	// Sort contact struct by name
 			break;
 		case 2:
 			listContact(counter, contact);
@@ -73,7 +73,8 @@ int main()
 		case 4:
 			deleteContact(counter, contact);
 			if (counter > 0) {
-				qsort(contact, counter, sizeof(struct phoneBook), sortContact);	// Sort contact struct by name
+				//qsort(contact, counter, sizeof(struct phoneBook), sortContact);	// Sort contact struct by name
+				sortir(counter, contact);	// Sort contact struct by name
 				counter--;
 			}
 			break;
@@ -97,7 +98,7 @@ int readContact(struct phoneBook *contact)
 
 	if (fp != NULL)
 	{
-		fseek(fp, 0, SEEK_END);//Reposition stream position indicator
+		fseek(fp, 0, SEEK_END); //Reposition stream position indicator
 		size = ftell(fp); // get size of the file
 
 		if (size == 0)
@@ -136,7 +137,7 @@ int newContact(int counter, struct phoneBook *contact)
 		validate = 0;
 		printf("Input name [1..30 char]: ");
 		scanf("%[^\n]", name);
-		scanf("%c", &bilas); //fflush(stdin); // comment if running on machine
+		fflush(stdin); // comment if running on machine
 
 		if (strlen(name) > 30)
 		{
@@ -155,7 +156,7 @@ int newContact(int counter, struct phoneBook *contact)
 		validate = 0;
 		printf("Input phone number [6..12 digits]: ");
 		scanf("%[^\n]", phoneNumber);
-		scanf("%c", &bilas); //fflush(stdin); // comment if running on machine
+		fflush(stdin); // comment if running on machine
 
 		if (strlen(phoneNumber) < 6 || strlen(phoneNumber) > 12)
 		{
@@ -233,7 +234,7 @@ int searchContact(int counter, struct phoneBook* contact)
 	printf("Search Contact\n");
 	printf("Input name [1..30 char]: ");
 	scanf("%[^\n]", iName);
-	scanf("%c", &bilas); //fflush(stdin); // comment if running on machine
+	fflush(stdin); // comment if running on machine
 	puts("");
 
 	for (j = 0; j < strlen(iName); j++)
@@ -304,7 +305,7 @@ int deleteContact(int counter, struct phoneBook* contact)
 			validate = 0;
 			printf("Input #number of contact that you want to delete[1..%d]: ", counter);
 			scanf("%d", &selected);
-			scanf("%c", &bilas); //fflush(stdin); // comment if running on machine
+			fflush(stdin); // comment if running on machine
 
 			if (selected > counter || selected < 1)
 			{
@@ -323,6 +324,27 @@ int deleteContact(int counter, struct phoneBook* contact)
 	}
 
 	system("pause");
+	return 0;
+}
+
+
+int sortir(int count, struct phoneBook* contact)
+{
+	int i,
+		j;
+	for (i = 0; i < count; i++)
+	{
+		for (j = count - 1; j> i; j--)
+		{
+			if (strcmpi(contact[j].name, contact[j - 1].name) < 0)
+			{
+				struct phoneBook temp; // My old nokia phone only can store up to 200 contact. hahaha
+				temp = contact[j];
+				contact[j] = contact[j - 1];
+				contact[j - 1] = temp;
+			}
+		}
+	}
 	return 0;
 }
 
